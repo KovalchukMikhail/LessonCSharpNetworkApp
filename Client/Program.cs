@@ -31,6 +31,12 @@ namespace Client
 
                 Message message = new Message() { Text = messageText, NicknameFrom = From, NicknameTo = "Server", DateTime = DateTime.Now };
                 infrastructure.SendMessage(message, udpClient, iPEndPoint);
+                if (messageText.ToLower() == "exit")
+                {
+                    Console.WriteLine("Досвидание!");
+                    return;
+                }
+                    
 
                 Message answer = infrastructure.GetMessage(udpClient, iPEndPoint);
                 answer.Print();

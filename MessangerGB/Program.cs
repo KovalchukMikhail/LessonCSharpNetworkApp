@@ -21,10 +21,17 @@ namespace MessangerGB
             while (true)
             {
                 Message message = infrastructure.GetMessage(udpClient, iPEndPoint);
+                if(message.Text.ToLower() == "exit")
+                {
+                    return;
+                }
                 message.Print();
 
-                Message answer = new Message() { Text = "The message has been delivered", NicknameFrom = "Server", NicknameTo = message.NicknameFrom, DateTime = DateTime.Now };
-                infrastructure.SendMessage(answer, udpClient, iPEndPoint);
+                ThreadPool.QueueUserWorkItem((obj) =>
+                {
+                    Message answer = new Message() { Text = "The message has been delivered", NicknameFrom = "Server", NicknameTo = message.NicknameFrom, DateTime = DateTime.Now };
+                    infrastructure.SendMessage(answer, udpClient, iPEndPoint);
+                });
 
             }
         }
