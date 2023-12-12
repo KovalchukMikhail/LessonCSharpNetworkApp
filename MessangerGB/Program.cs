@@ -8,32 +8,42 @@ namespace MessangerGB
     {
         static void Main(string[] args)
         {
-            Server("Hello");
+            var task = Task.Run(Server);
+
+            task.Wait();
+
         }
-        public static void Server(string name)
+        public static void Server()
         {
             UdpClient udpClient = new UdpClient(12345);
-            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 12346);
+            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, 0);
             Infrastructure infrastructure = new Infrastructure();
+            using CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+            CancellationToken token = cancelTokenSource.Token;
 
             Console.WriteLine("Сервер ждет сообщение от клиента");
-
+            
             while (true)
             {
-                Message message = infrastructure.GetMessage(udpClient, iPEndPoint);
+                Message message = infrastructure.GetMessage(udpClient, ref iPEndPoint);
                 if(message.Text.ToLower() == "exit")
                 {
+                    cancelTokenSource.Cancel();
                     return;
                 }
                 message.Print();
 
-                ThreadPool.QueueUserWorkItem((obj) =>
+                Task.Run(() =>
                 {
+                    if (token.IsCancellationRequested)
+                        token.ThrowIfCancellationRequested();
+
                     Message answer = new Message() { Text = "The message has been delivered", NicknameFrom = "Server", NicknameTo = message.NicknameFrom, DateTime = DateTime.Now };
                     infrastructure.SendMessage(answer, udpClient, iPEndPoint);
-                });
+                    }, token);
 
             }
+
         }
 
 

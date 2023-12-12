@@ -38,7 +38,7 @@ namespace Client
                 }
                     
 
-                Message answer = infrastructure.GetMessage(udpClient, iPEndPoint);
+                Message answer = infrastructure.GetMessage(udpClient, ref iPEndPoint);
                 answer.Print();
 
             }

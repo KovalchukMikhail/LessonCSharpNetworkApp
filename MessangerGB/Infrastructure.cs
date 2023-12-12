@@ -16,7 +16,7 @@ namespace MessangerGB
             byte[] data = Encoding.UTF8.GetBytes(json);
             udpClient.Send(data, data.Length, iPEndPoint);
         }
-        public Message GetMessage(UdpClient udpClient, IPEndPoint iPEndPoint)
+        public Message GetMessage(UdpClient udpClient, ref IPEndPoint iPEndPoint)
         {
             byte[] buffer = udpClient.Receive(ref iPEndPoint);
 
