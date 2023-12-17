@@ -12,12 +12,13 @@ namespace Client
             SentMessage(args[0], args[1]);
         }
 
-        public static void SentMessage(string From, string ip)
+        public static void SentMessage(string from, string ip)
         {
 
             UdpClient udpClient = new UdpClient(12346);
             IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Parse(ip), 12345);
             Infrastructure infrastructure = new Infrastructure();
+            MessageFactory factory = new MessageFactory();
 
             while (true)
             {
@@ -28,8 +29,8 @@ namespace Client
                     messageText = Console.ReadLine();
                 }
                 while (string.IsNullOrEmpty(messageText));
-
-                Message message = new Message() { Text = messageText, NicknameFrom = From, NicknameTo = "Server", DateTime = DateTime.Now };
+                
+                Message message = factory.CreateMessage(messageText, from, "Server", DateTime.Now);
                 infrastructure.SendMessage(message, udpClient, iPEndPoint);
                 if (messageText.ToLower() == "exit")
                 {
@@ -37,7 +38,6 @@ namespace Client
                     return;
                 }
                     
-
                 Message answer = infrastructure.GetMessage(udpClient, ref iPEndPoint);
                 answer.Print();
 

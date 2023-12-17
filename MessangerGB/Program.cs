@@ -22,7 +22,8 @@ namespace MessangerGB
             CancellationToken token = cancelTokenSource.Token;
 
             Console.WriteLine("Сервер ждет сообщение от клиента");
-            
+            MessageFactory factory = new MessageFactory();
+
             while (true)
             {
                 Message message = infrastructure.GetMessage(udpClient, ref iPEndPoint);
@@ -32,13 +33,13 @@ namespace MessangerGB
                     return;
                 }
                 message.Print();
-
+                
                 Task.Run(() =>
                 {
                     if (token.IsCancellationRequested)
                         token.ThrowIfCancellationRequested();
 
-                    Message answer = new Message() { Text = "The message has been delivered", NicknameFrom = "Server", NicknameTo = message.NicknameFrom, DateTime = DateTime.Now };
+                    Message answer = factory.CreateMessage("The message has been delivered", "Server", message.NicknameFrom, DateTime.Now);
                     infrastructure.SendMessage(answer, udpClient, iPEndPoint);
                     }, token);
 

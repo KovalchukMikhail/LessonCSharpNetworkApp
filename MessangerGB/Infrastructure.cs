@@ -10,10 +10,19 @@ namespace MessangerGB
 {
     public class Infrastructure
     {
-        public void SendMessage(Message message, UdpClient udpClient, IPEndPoint iPEndPoint)
+        public void SendJsonMessage(Message message, UdpClient udpClient, IPEndPoint iPEndPoint)
         {
-            string json = message.SerializeMessageToJson();
-            byte[] data = Encoding.UTF8.GetBytes(json);
+            string json = MessageFactory.SerializeMessageToJson(message);
+            SendMessage(udpClient, iPEndPoint, json);
+        }
+        public void SendXmlMessage(Message message, UdpClient udpClient, IPEndPoint iPEndPoint)
+        {
+            string xml = MessageFactory.SerializeMessageToXml(message);
+            SendMessage(udpClient, iPEndPoint, xml);
+        }
+        public void SendMessage(UdpClient udpClient, IPEndPoint iPEndPoint, string msg)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(msg);
             udpClient.Send(data, data.Length, iPEndPoint);
         }
         public Message GetMessage(UdpClient udpClient, ref IPEndPoint iPEndPoint)
@@ -22,7 +31,7 @@ namespace MessangerGB
 
             var messageText = Encoding.UTF8.GetString(buffer);
 
-            return Message.DeserializeFromJson(messageText);
+            return MessageFactory.DeserializeMessage(messageText);
         }
     }
 }
