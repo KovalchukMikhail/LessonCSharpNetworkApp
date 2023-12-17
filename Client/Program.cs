@@ -31,7 +31,7 @@ namespace Client
                 while (string.IsNullOrEmpty(messageText));
                 
                 Message message = factory.CreateMessage(messageText, from, "Server", DateTime.Now);
-                infrastructure.SendMessage(message, udpClient, iPEndPoint);
+                infrastructure.SendJsonMessage(message, udpClient, iPEndPoint);
                 if (messageText.ToLower() == "exit")
                 {
                     Console.WriteLine("Досвидание!");

@@ -40,7 +40,7 @@ namespace MessangerGB
                         token.ThrowIfCancellationRequested();
 
                     Message answer = factory.CreateMessage("The message has been delivered", "Server", message.NicknameFrom, DateTime.Now);
-                    infrastructure.SendMessage(answer, udpClient, iPEndPoint);
+                    infrastructure.SendJsonMessage(answer, udpClient, iPEndPoint);
                     }, token);
 
             }
