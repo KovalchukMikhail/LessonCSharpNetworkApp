@@ -9,17 +9,14 @@ namespace MessangerGB
 {
     public class Message
     {
+        public int? MessageId { get; set; }
         public string Text { get; set; }
-        public DateTime DateTime { get; set; }
-        public string NicknameFrom { get; set; }
-        public string NicknameTo { get; set; }
-        public void Print()
-        {
-            Console.WriteLine(ToString());
-        }
-        public override string ToString()
-        {
-            return $"{this.DateTime} получено сообщение \"{this.Text}\" от {this.NicknameFrom}";
-        }
+        public DateTime DateSend { get; set; }
+        public bool IsSent { get; set; }
+        public int? UserToId { get; set; }
+        public int? UserFromId { get; set; }
+        public virtual User? UserTo { get; set; }
+        public virtual User? UserFrom { get; set; }
+
     }
 }

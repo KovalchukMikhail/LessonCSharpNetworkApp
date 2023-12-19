@@ -13,7 +13,7 @@ namespace MessangerGB
     {
         public Message CreateMessage(string text, string nicknameFrom, string nicknameTo, DateTime dateTime)
         {
-            return new Message() { Text = text, NicknameFrom = nicknameFrom, NicknameTo = nicknameTo, DateTime = dateTime };
+            return new Message() { Text = text, /*NicknameFrom = nicknameFrom, NicknameTo = nicknameTo, DateTime = dateTime*/ };
         }
         public static string SerializeMessageToJson(Message message) => JsonSerializer.Serialize(message);
 

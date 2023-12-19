@@ -32,16 +32,16 @@ namespace MessangerGB
                     cancelTokenSource.Cancel();
                     return;
                 }
-                message.Print();
+                //message.Print();
                 
-                Task.Run(() =>
-                {
-                    if (token.IsCancellationRequested)
-                        token.ThrowIfCancellationRequested();
+                //Task.Run(() =>
+                //{
+                //    if (token.IsCancellationRequested)
+                //        token.ThrowIfCancellationRequested();
 
-                    Message answer = factory.CreateMessage("The message has been delivered", "Server", message.NicknameFrom, DateTime.Now);
-                    infrastructure.SendJsonMessage(answer, udpClient, iPEndPoint);
-                    }, token);
+                //    Message answer = factory.CreateMessage("The message has been delivered", "Server", message.NicknameFrom, DateTime.Now);
+                //    infrastructure.SendJsonMessage(answer, udpClient, iPEndPoint);
+                //    }, token);
 
             }
 
